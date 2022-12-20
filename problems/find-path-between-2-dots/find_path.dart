@@ -21,7 +21,6 @@ isPath(var arr) {
   for (int i = 1; i < col; i++) {
     for (int j = 1; j < row; j++) {
       if (arr[i][j] != -1) {
-       // arr[i][j] =  arr[i][j - 1] > arr[i - 1][j] ? arr[i][j - 1] : arr[i - 1][j];
         arr[i][j] = max(num.parse(arr[i][j - 1].toString()),
             num.parse(arr[i - 1][j].toString()));
       }
