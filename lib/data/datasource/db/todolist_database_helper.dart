@@ -1,62 +1,37 @@
-import 'package:sqflite/sqflite.dart';
+import 'package:hive/hive.dart';
 import 'package:todolist/data/models/todo_table.dart';
 
 class TodolistDatabaseHelper {
-  static TodolistDatabaseHelper? _databaseHelper;
+  late Box<TodoTable> _tasksBox;
 
-  TodolistDatabaseHelper._instace() {
-    _databaseHelper = this;
+  Future<void> init() async {
+    Hive.registerAdapter(TodoTableAdapter());
+    _tasksBox = await Hive.openBox<TodoTable>('tasks');
   }
 
-  factory TodolistDatabaseHelper() =>
-      _databaseHelper ?? TodolistDatabaseHelper._instace();
-
-  static Database? _database;
-
-  Future<Database?> get database async {
-    _database = await _initDb();
-    return _database;
+  List<TodoTable> loadData() {
+    final tasks = _tasksBox.values;
+    var items = tasks.toList();
+    items.sort((a, b) => b.id.compareTo(a.id));
+    return items;
   }
 
-  static const String _tblTodolist = 'todolist';
-
-  Future<Database> _initDb() async {
-    final path = await getDatabasesPath();
-    final databasePath = '$path/todo.db';
-    var db = await openDatabase(databasePath, version: 1, onCreate: _onCreate);
-    return db;
+  Future<void> addTask(final TodoTable todoTable) async {
+    await _tasksBox.add(todoTable);
   }
 
-  void _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE  $_tblTodolist (
-        id TEXT PRIMARY KEY,
-        title TEXT,
-        status INTEGER
-      );
-      CREATE UNIQUE INDEX idx_todo
-      ON $_tblTodolist (rowid);
-    ''');
+  Future<void> updateTask(final int id) async {
+    final taskToEdit =
+        _tasksBox.values.firstWhere((element) => element.id == id);
+    final index = taskToEdit.key as int;
+    await _tasksBox.put(index,
+        TodoTable(id: id, title: taskToEdit.title, status: !taskToEdit.status));
   }
 
-  Future<int> insertTodo(TodoTable todoTable) async {
-    final db = await database;
-    return await db!.insert(_tblTodolist, todoTable.toJson());
-  }
-
-  Future<List<Map<String, dynamic>>> getAllTodos() async {
-    final db = await database;
-    final List<Map<String, dynamic>> results = await db!.query(_tblTodolist);
-    return results;
-  }
-
-  Future<int> updateTodo(String id) async {
-    final db = await database;
-    return await db!.rawUpdate('''
-    UPDATE $_tblTodolist 
-    SET status = ?
-    WHERE id = ?
-    ''', [1, id]);
-    // return await db.update(_tblTodolist,todoTable.toMap(), where: 'id = ?', whereArgs: id);
+  Future<void> deleteTask(final int id) async {
+    final taskToEdit =
+        _tasksBox.values.firstWhere((element) => element.id == id);
+    final index = taskToEdit.key as int;
+    await _tasksBox.delete(index);
   }
 }

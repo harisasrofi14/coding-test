@@ -3,11 +3,13 @@ import 'package:todolist/data/datasource/db/todolist_database_helper.dart';
 import 'package:todolist/data/models/todo_table.dart';
 
 abstract class TodolistLocalDataSource {
-  Future<String> insertTodolist(TodoTable todoTable);
+  Future<bool> insertTodolist(TodoTable todoTable);
 
-  Future<String> updateTodolist(String id);
+  Future<bool> updateTodolist(int id);
 
   Future<List<TodoTable>> getAllTodolist();
+
+  Future<bool> removeTodoList(int id);
 }
 
 class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
@@ -18,28 +20,38 @@ class TodolistLocalDataSourceImpl implements TodolistLocalDataSource {
   @override
   Future<List<TodoTable>> getAllTodolist() async {
     try {
-      final result = await databaseHelper.getAllTodos();
-      return result.map((data) => TodoTable.fromMap(data)).toList();
+      final result = databaseHelper.loadData();
+      return result;
     } catch (e) {
       throw DatabaseException(e.toString());
     }
   }
 
   @override
-  Future<String> insertTodolist(TodoTable todoTable) async {
+  Future<bool> insertTodolist(TodoTable todoTable) async {
     try {
-      await databaseHelper.insertTodo(todoTable);
-      return 'Success';
+      databaseHelper.addTask(todoTable);
+      return true;
     } catch (e) {
       throw DatabaseException(e.toString());
     }
   }
 
   @override
-  Future<String> updateTodolist(String id) async {
+  Future<bool> updateTodolist(int id) async {
     try {
-      await databaseHelper.updateTodo(id);
-      return 'Success';
+      await databaseHelper.updateTask(id);
+      return true;
+    } catch (e) {
+      throw DatabaseException(e.toString());
+    }
+  }
+
+  @override
+  Future<bool> removeTodoList(int id) async {
+    try {
+      await databaseHelper.deleteTask(id);
+      return true;
     } catch (e) {
       throw DatabaseException(e.toString());
     }

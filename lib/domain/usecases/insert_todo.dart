@@ -7,7 +7,7 @@ class InsertTodo {
 
   InsertTodo(this.repository);
 
-  Future<Either<Failure, String>> execute(String todo) {
-    return repository.insertAllTodoList(todo);
+  Future<Either<Failure, bool>> execute(String todo) {
+    return repository.insertTodoList(todo);
   }
 }

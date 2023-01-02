@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
 
 class TodoEntity extends Equatable {
-  String id;
-  String title;
-  bool status;
+  final int id;
+  final String title;
+  final bool status;
 
-  TodoEntity({required this.id, required this.title, required this.status});
+  const TodoEntity(
+      {required this.id, required this.title, required this.status});
 
   @override
   List<Object?> get props {

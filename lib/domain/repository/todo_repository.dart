@@ -3,9 +3,11 @@ import 'package:todolist/common/failure.dart';
 import 'package:todolist/domain/entities/todo_entity.dart';
 
 abstract class TodoRepository {
-  Future<Either<Failure, List<TodoEntity>>> getAllTodoList();
+  Future<Either<Failure, List<TodoEntity>>> loadTodoList();
 
-  Future<Either<Failure, String>> insertAllTodoList(String todo);
+  Future<Either<Failure, bool>> insertTodoList(String todo);
 
-  Future<Either<Failure, String>> updateTodoList(String id);
+  Future<Either<Failure, bool>> updateTodoList(int id);
+
+  Future<Either<Failure, bool>> removeTodoList(int id);
 }
