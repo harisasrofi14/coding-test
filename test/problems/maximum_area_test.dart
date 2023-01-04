@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import '../problems/maximum-area-of-island/maximum_area.dart';
+import '../../problems/maximum-area-of-island/maximum_area.dart';
 
 void main() {
   group('Max Area of island', () {

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import '../problems/number-of-island/number_of_island.dart';
+import '../../problems/number-of-island/number_of_island.dart';
 
 void main() {
   group('Number of island', () {

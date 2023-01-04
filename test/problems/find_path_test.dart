@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import '../problems/find-path-between-2-dots/find_path.dart';
+import '../../problems/find-path-between-2-dots/find_path.dart';
 
 void main() {
   group('Find path', () {

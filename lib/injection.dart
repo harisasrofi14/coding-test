@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:todolist/data/datasource/db/todolist_database_helper.dart';
 import 'package:todolist/data/datasource/local_data_source.dart';
-import 'package:todolist/data/repositories/TodoRepositoryImpl.dart';
+import 'package:todolist/data/repositories/todo_repositories_impl.dart';
 import 'package:todolist/domain/repository/todo_repository.dart';
 import 'package:todolist/domain/usecases/insert_todo.dart';
 import 'package:todolist/domain/usecases/load_todo.dart';
